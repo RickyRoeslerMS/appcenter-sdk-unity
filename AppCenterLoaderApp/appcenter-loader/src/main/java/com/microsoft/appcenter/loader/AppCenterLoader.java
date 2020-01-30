@@ -53,6 +53,8 @@ public class AppCenterLoader extends ContentProvider {
     private static final String LOG_URL_SHARED_PREFERENCES_KEY = "AppCenter.Unity.LogUrlKey";
     private static final String APP_SECRET_SHARED_PREFERENCES_KEY = "AppCenter.Unity.AppSecretKey";
     private static final String MAX_STORAGE_SIZE_SHARED_PREFERENCES_KEY = "AppCenter.Unity.MaxStorageSizeKey";
+    private static final String DISABLE_AUTO_AUTHENTICATION_SHARED_PREFERENCES_KEY = "AppCenter.Unity.DisableAutoAuthenticationFlagKey";
+    private static final String DISABLE_AUTO_CHECK_FOR_UPDATE_SHARED_PREFERENCES_KEY = "AppCenter.Unity.DisableAutoCheckForUpdateFlagKey";
     private static final String TRUE_VALUE = "True";
     private static final String TAG = "AppCenterLoader";
     private static final String ENABLE_DISTRIBUTE_FOR_DEBUGGABLE_BUILD_KEY = "appcenter_enable_distribute_for_debuggable_build";
@@ -109,6 +111,16 @@ public class AppCenterLoader extends ContentProvider {
                 if (customApiUrl != null) {
                     Distribute.setApiUrl(customApiUrl);
                 }
+            }
+            int mask = 0x00;
+            if (isTrueValue(getStringResource(DISABLE_AUTO_AUTHENTICATION_SHARED_PREFERENCES_KEY))) {
+                //mask |= DistributeFlags.DISABLE_AUTOMATIC_AUTHENTICATION;
+            }
+            if (isTrueValue(getStringResource(DISABLE_AUTO_CHECK_FOR_UPDATE_SHARED_PREFERENCES_KEY))) {
+                //mask |= DistributeFlags.DISABLE_AUTOMATIC_CHECK_FOR_UPDATE;
+            }
+            if (mask != 0x00) {
+                //Distribute.configure(mask);
             }
             if (isTrueValue(getStringResource(USE_CUSTOM_INSTALL_URL_KEY))) {
                 String customInstallUrl = getStringResource(CUSTOM_INSTALL_URL_KEY);

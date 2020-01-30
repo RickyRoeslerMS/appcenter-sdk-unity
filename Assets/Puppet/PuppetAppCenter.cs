@@ -21,6 +21,8 @@ public class PuppetAppCenter : MonoBehaviour
     public static int StartupTypeCached = 2;
     public static int UpdateTrackCached = (int)UpdateTrack.Public;
     public static int WhenUpdateTrackCached = (int)WhenUpdateTrackEnum.Now;
+    public static int DisableAutoAuthenticationFlagCached = 0;
+    public static int DisableAutoCheckForUpdateFlagCached = 0;
     public static readonly EventWaitHandle StorageReadyEvent = new ManualResetEvent(false);
     public Toggle Enabled;
     public Text InstallIdLabel;
@@ -48,9 +50,15 @@ public class PuppetAppCenter : MonoBehaviour
     private const string UpdateTrackAndroidKey = "AppCenter.Unity.UpdateTrackKey";
     private const string WhenUpdateTrackKey = "MSAppCenterWhenUpdateTrackUnityKey";
     private const string WhenUpdateTrackAndroidKey = "AppCenter.Unity.WhenUpdateTrackKey";
+    private const string DisableAutoAuthenticationFlagKey = "MSAppCenterDisableAutoAuthenticationFlagUnityKey";
+    private const string DisableAutoAuthenticationFlagAndroidKey = "AppCenter.Unity.DisableAutoAuthenticationFlagKey";
+    private const string DisableAutoCheckForUpdateFlagKey = "MSAppCenterDisableAutoCheckForUpdateFlagUnityKey";
+    private const string DisableAutoCheckForUpdateFlagAndroidKey = "AppCenter.Unity.DisableAutoCheckForUpdateFlagKey";
     public GameObject CustomProperty;
     public RectTransform PropertiesList;
     public Toggle DistributeEnabled;
+    public Toggle DistributeDisableAutoAuthenticationFlag;
+    public Toggle DistributeDisableAutoCheckForUpdateFlag;
     public Toggle PushEnabled;
     public Toggle CustomDialog;
     public static string FlagCustomDialog = "FlagCustomDialog";
@@ -131,6 +139,8 @@ public class PuppetAppCenter : MonoBehaviour
         StartupTypeCached = PlayerPrefs.GetInt(StartupModeKey, (int)Microsoft.AppCenter.Unity.StartupType.Both);
         UpdateTrackCached = PlayerPrefs.GetInt(UpdateTrackKey, (int)Distribute.UpdateTrack);
         WhenUpdateTrackCached = PlayerPrefs.GetInt(WhenUpdateTrackKey, (int)WhenUpdateTrackEnum.Now);
+        DisableAutoAuthenticationFlagCached = PlayerPrefs.GetInt(DisableAutoAuthenticationFlagKey, 0);
+        DisableAutoCheckForUpdateFlagCached = PlayerPrefs.GetInt(DisableAutoCheckForUpdateFlagKey, 0);
         CustomDialog.isOn = PlayerPrefs.GetInt(FlagCustomDialog, 0) == 1;
         StorageReadyEvent.Set();
         AppCenterBehavior.InitializingServices += OnServicesInitializing;
@@ -197,6 +207,8 @@ public class PuppetAppCenter : MonoBehaviour
         StartupType.value = StartupTypeCached;
         UpdateTrackDropDown.value = UpdateTrackCached - 1;
         WhenUpdateTrackDropdown.value = WhenUpdateTrackCached;
+        DistributeDisableAutoAuthenticationFlag.enabled = DisableAutoAuthenticationFlagCached == 1 ? true : false;
+        DistributeDisableAutoCheckForUpdateFlag.enabled = DisableAutoCheckForUpdateFlagCached == 1 ? true : false;
 
         var isPushEnabled = Push.IsEnabledAsync();
         yield return isPushEnabled;
@@ -327,6 +339,28 @@ public class PuppetAppCenter : MonoBehaviour
         WhenUpdateTrackCached = whenUpdateTrack;
 #if UNITY_ANDROID && !UNITY_EDITOR
         AndroidUtility.SetPreferenceInt(WhenUpdateTrackAndroidKey, whenUpdateTrack);
+#endif
+    }
+
+    public void SetDisableAutoAuthenticateFlag(bool enable)
+    {
+        int flag = enable ? 1 : 0;
+        PlayerPrefs.SetInt(DisableAutoAuthenticationFlagKey, flag);
+        PlayerPrefs.Save();
+        DisableAutoAuthenticationFlagCached = flag;
+#if UNITY_ANDROID && !UNITY_EDITOR
+        AndroidUtility.SetPreferenceString(DisableAutoAuthenticationFlagAndroidKey, enable ? "true" : "false");
+#endif
+    }
+
+    public void SetDisableAutoCheckForUpdateFlag(bool enable)
+    {
+        int flag = enable ? 1 : 0;
+        PlayerPrefs.SetInt(DisableAutoCheckForUpdateFlagKey, flag);
+        PlayerPrefs.Save();
+        DisableAutoCheckForUpdateFlagCached = flag;
+#if UNITY_ANDROID && !UNITY_EDITOR
+        AndroidUtility.SetPreferenceString(DisableAutoCheckForUpdateFlagAndroidKey, enable ? "true" : "false");
 #endif
     }
 

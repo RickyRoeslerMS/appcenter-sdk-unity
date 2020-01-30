@@ -49,6 +49,8 @@ static NSString *const kMSStartTargetKey = @"MSAppCenterStartTargetUnityKey";
 static NSString *const kMSStorageSizeKey = @"MSAppCenterMaxStorageSizeUnityKey";
 static NSString *const kMSLogUrlKey = @"MSAppCenterLogUrlUnityKey";
 static NSString *const kMSAppSecretKey = @"MSAppCenterAppSecretUnityKey";
+static NSString *const kMSDisableAutomaticCheckForUpdateFlag = @"MSAppCenterDisableAutoCheckForUpdateFlagUnityKey";
+static NSString *const kMSDisableAutomaticAuthenticationFlag = @"MSAppCenterDisableAutoAuthenticationFlagUnityKey";
 
 static const int kMSLogLevel = 0 /*LOG_LEVEL*/;
 static const int kMSStartupType = 0 /*STARTUP_TYPE*/;
@@ -116,6 +118,18 @@ static const int kMSStartupType = 0 /*STARTUP_TYPE*/;
 #endif // APPCENTER_UNITY_USE_CUSTOM_INSTALL_URL
   [classes addObject:MSDistribute.class];
 
+  NSNumber *disableAutoCheckForUpdateFlag = [[NSUserDefaults standardUserDefaults] objectForKey:kMSDisableAutomaticCheckForUpdateFlag];
+  NSNumber *disableAutoAuthFlag = [[NSUserDefaults standardUserDefaults] objectForKey:kMSDisableAutomaticAuthenticationFlag];
+  //int mask = MSDistributeFlagsNone;
+  if (disableAutoCheckForUpdateFlag == 1) {
+    //mask |= MSDistributeFlagsDisableAutomaticCheckForUpdate;
+  }
+  if (disableAutoAuthFlag == 1) {
+    //mask |= MSDistributeFlagsDisableAutomaticAuthentication;
+  }
+  if (mask != MSDistributeFlagsNone) {
+    //[MSDistribute configure:mask];
+  }
 #endif // APPCENTER_UNITY_USE_DISTRIBUTE
 
   NSString *customLogUrl = [[NSUserDefaults standardUserDefaults] objectForKey:kMSLogUrlKey];
