@@ -349,7 +349,7 @@ public class PuppetAppCenter : MonoBehaviour
         PlayerPrefs.Save();
         DisableAutoAuthenticationFlagCached = flag;
 #if UNITY_ANDROID && !UNITY_EDITOR
-        AndroidUtility.SetPreferenceString(DisableAutoAuthenticationFlagAndroidKey, enable ? "true" : "false");
+        AndroidUtility.SetPreferenceString(DisableAutoAuthenticationFlagAndroidKey, enable ? "True" : "false");
 #endif
     }
 
@@ -360,7 +360,7 @@ public class PuppetAppCenter : MonoBehaviour
         PlayerPrefs.Save();
         DisableAutoCheckForUpdateFlagCached = flag;
 #if UNITY_ANDROID && !UNITY_EDITOR
-        AndroidUtility.SetPreferenceString(DisableAutoCheckForUpdateFlagAndroidKey, enable ? "true" : "false");
+        AndroidUtility.SetPreferenceString(DisableAutoCheckForUpdateFlagAndroidKey, enable ? "True" : "false");
 #endif
     }
 
